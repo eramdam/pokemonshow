@@ -1,13 +1,20 @@
 {
   "name": "pokemonshow",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Shows a (random) Pokémon in your terminal!",
   "main": "index.js",
   "scripts": {
     "scrape": "ts-node tools/scrape.ts",
     "build": "tsc",
-    "clean": "rm src/*.js tools/*.js"
+    "clean": "rm src/*.js tools/*.js",
+    "prepare": "npm run build"
   },
+  "files": [
+    "src/cli.js",
+    "images/*.png",
+    "xterms/*",
+    "pokemon.json"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eramdam/pokemonshow.git"
