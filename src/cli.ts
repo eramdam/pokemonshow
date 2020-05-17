@@ -87,5 +87,5 @@ async function displayImage(
     return;
   }
 
-  displayImage(pokemon, !!cli.flags.xterm, !!cli.flags.say);
+  displayImage(pokemon, !!cli.flags.xterm, !!cli.flags.s);
 })();
