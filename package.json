@@ -1,0 +1,36 @@
+{
+  "name": "pokemonsay",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "scrape": "ts-node tools/scrape.ts",
+    "postinstall": "npm run scrape"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eramdam/pokemonsay.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eramdam/pokemonsay/issues"
+  },
+  "homepage": "https://github.com/eramdam/pokemonsay#readme",
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "axios": "^0.19.2",
+    "jsdom": "^16.2.2",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.9.2"
+  },
+  "dependencies": {
+    "@types/jsdom": "^16.2.3",
+    "@types/lodash": "^4.14.151",
+    "@types/progress": "^2.0.3",
+    "lodash": "^4.17.15",
+    "progress": "^2.0.3"
+  }
+}
