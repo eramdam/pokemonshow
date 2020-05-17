@@ -9,15 +9,15 @@ const meow = require("meow");
 const cli = meow(
   `
 	Usage
-	  $ pokeshow <nameOrNumber>
+	  $ pokemonshow <nameOrNumber>
 
 	Options
 		--xterm, -x  Show xterm instead of image in iTerm
 		--say-name, -s
 
 	Examples
-		$ pokeshow pikachu
-		$ pokeshow 025 -x
+		$ pokemonshow pikachu
+		$ pokemonshow 025 -x
 `,
   {
     flags: {

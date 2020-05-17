@@ -1,25 +1,31 @@
 {
-  "name": "pokemonsay",
+  "name": "pokemonshow",
   "version": "1.0.0",
-  "description": "",
+  "description": "Shows a (random) Pokémon in your terminal!",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "scrape": "ts-node tools/scrape.ts",
     "build": "tsc",
     "clean": "rm src/*.js tools/*.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eramdam/pokemonsay.git"
+    "url": "git+https://github.com/eramdam/pokemonshow.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "pokemon",
+    "image",
+    "xterm"
+  ],
+  "bin": {
+    "pokemonshow": "src/cli.js"
+  },
+  "author": "Damien Erambert",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/eramdam/pokemonsay/issues"
+    "url": "https://github.com/eramdam/pokemonshow/issues"
   },
-  "homepage": "https://github.com/eramdam/pokemonsay#readme",
+  "homepage": "https://github.com/eramdam/pokemonshow#readme",
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/jsdom": "^16.2.3",
