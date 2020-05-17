@@ -58,6 +58,7 @@ const imagesSelector = `#mw-content-text table tr th a img`;
       const response = await axios.get(image.src, {
         responseType: "arraybuffer",
       });
+      bar.tick();
 
       const imagePath = path.resolve(__dirname, "../images", image.filename);
 
@@ -67,7 +68,6 @@ const imagesSelector = `#mw-content-text table tr th a img`;
         height: metadata.height || 0,
       };
 
-      bar.tick();
       return await sharp(response.data).toFile(imagePath);
     } catch (e) {
       console.error(`Could not download ${image.pokemon} from ${image.src}`);
@@ -83,6 +83,7 @@ const imagesSelector = `#mw-content-text table tr th a img`;
     })
     .mapValues((image) => ({
       filename: image.filename,
+      name: image.pokemon,
       size: image.size,
     }))
     .value();
@@ -92,6 +93,7 @@ const imagesSelector = `#mw-content-text table tr th a img`;
     })
     .mapValues((image) => ({
       filename: image.filename,
+      name: image.pokemon,
       size: image.size,
     }))
     .value();

@@ -26,19 +26,19 @@
     "@types/lodash": "^4.14.151",
     "@types/progress": "^2.0.3",
     "@types/slug": "^0.9.1",
-    "@types/yargs": "^15.0.5",
     "axios": "^0.19.2",
     "jsdom": "^16.2.2",
     "lodash": "^4.17.15",
+    "progress": "^2.0.3",
+    "slug": "^2.1.1",
     "ts-node": "^8.10.1",
     "typescript": "^3.9.2",
-    "progress": "^2.0.3",
-    "slug": "^2.1.1"
+    "sharp": "^0.25.3",
+    "@types/sharp": "^0.25.0"
   },
   "dependencies": {
-    "@types/sharp": "^0.25.0",
-    "sharp": "^0.25.3",
-    "term-img-cli": "^2.0.0",
-    "terminal-image": "^1.0.1"
+    "execa": "^4.0.1",
+    "meow": "^7.0.1",
+    "term-img": "^4.1.0"
   }
 }
