@@ -100,6 +100,28 @@ function trimAndSaveImage(image: string) {
     }))
     .value();
   const pokeMapByNumber = _(imagesObjects)
+    .filter((image) => {
+      // We try to extract the suffix in the filename.
+      // Some filenames have a suffix indicating an alternative form of a given Pokémon
+      // Examples:
+      // 052-Meowth.png => "Regular" Meowth
+      // 052-Meowth-A.png => Alolan Meowth
+      // 052-Meowth-G.png => Galarian Meowth
+      const suffixMatch = image.filename.match(/-([A-Z]+).png$/);
+
+      // If we don't have any suffix, we're all good.
+      if (!suffixMatch) {
+        return true;
+      }
+
+      // If the suffix is "XY", we're all good too.
+      if (suffixMatch[1] === "XY") {
+        return true;
+      }
+
+      // Otherwise, we can exclude.
+      return false;
+    })
     .keyBy((image) => {
       return Number(image.number);
     })
