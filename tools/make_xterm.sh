@@ -9,5 +9,6 @@ do
     filename=$(basename "$fullfilename")
     extension="${filename##*.}"
     filename="${filename%.*}"
+    echo "converting $filename"
     img2xterm "$fullfilename" "xterms/$filename"
 done
