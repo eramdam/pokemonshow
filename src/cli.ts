@@ -13,7 +13,7 @@ const cli = meow(
 
 	Options
 		--xterm, -x  Show xterm instead of image in iTerm
-		--say-name, -s
+		--say, -s
 
 	Examples
 		$ pokemonshow pikachu
@@ -24,6 +24,10 @@ const cli = meow(
       xterm: {
         type: "boolean",
         alias: "x",
+      },
+      say: {
+        type: "boolean",
+        alias: "s",
       },
     },
   }
@@ -57,7 +61,7 @@ async function displayImage(
   showName: boolean
 ) {
   if (showName) {
-    console.log(`It's ${pokemon.name}!`);
+    console.log(`It's ${pokemon.name}!\n`);
   }
   const fallback = async () => {
     const { stdout } = await execa("cat", [
@@ -87,5 +91,5 @@ async function displayImage(
     return;
   }
 
-  displayImage(pokemon, !!cli.flags.xterm, !!cli.flags.s);
+  displayImage(pokemon, !!cli.flags.xterm, !!cli.flags.say);
 })();
