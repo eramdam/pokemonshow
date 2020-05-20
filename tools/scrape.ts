@@ -25,10 +25,11 @@ const imagesSelector = `#mw-content-text table tr th a img`;
       const file = parseURL(src).pathname?.split("/").pop() || "";
       const number = file.match(/^[0-9]*/)![0];
       const form = file.replace(number, "").replace("MS.png", "");
-      const pokemon = element.getAttribute("alt");
-      const filename = `${number}-${pokemon}${form ? `-${form}` : ""}.png`;
+      const basePokemon = element.getAttribute("alt");
+      const filename = `${number}-${basePokemon}${form ? `-${form}` : ""}.png`;
+      const pokemon = `${basePokemon}${form ? `-${form}` : ""}`;
 
-      if (Number(number) < 1 || !pokemon) {
+      if (Number(number) < 1 || !basePokemon) {
         return undefined;
       }
 
