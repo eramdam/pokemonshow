@@ -54,7 +54,8 @@ function trimAndSaveImage(image: string) {
         src,
         number,
         filename,
-        pokemon,
+        localName: pokemon,
+        actualName: basePokemon,
       };
     })
     .compact()
@@ -82,7 +83,7 @@ function trimAndSaveImage(image: string) {
 
       await trimAndSaveImage(imagePath);
     } catch (e) {
-      console.error(`Could not download ${image.pokemon} from ${image.src}`);
+      console.error(`Could not download ${image.localName} from ${image.src}`);
       console.error(e);
     }
   });
@@ -91,11 +92,11 @@ function trimAndSaveImage(image: string) {
 
   const pokeMapByname = _(imagesObjects)
     .keyBy((image) => {
-      return slug(image.pokemon.replace(/([^a-z])/gi, "-$1")).toLowerCase();
+      return slug(image.localName.replace(/([^a-z])/gi, "-$1")).toLowerCase();
     })
     .mapValues((image) => ({
       filename: image.filename,
-      name: image.pokemon,
+      name: image.actualName,
     }))
     .value();
   const pokeMapByNumber = _(imagesObjects)
@@ -104,7 +105,7 @@ function trimAndSaveImage(image: string) {
     })
     .mapValues((image) => ({
       filename: image.filename,
-      name: image.pokemon,
+      name: image.actualName,
     }))
     .value();
 
