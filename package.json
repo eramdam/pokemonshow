@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "scrape": "ts-node tools/scrape.ts",
+    "make-xterm": "sh ./tools/make_xterm.sh",
     "build": "tsc",
     "clean": "rm src/*.js tools/*.js",
     "prepare": "npm run build"

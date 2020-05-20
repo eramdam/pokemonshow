@@ -33,6 +33,24 @@ npm i -g pokemonshow
 
 - The small images are only displayed on iTerm2 >= 3.x (using [term-img](https://github.com/sindresorhus/term-img)). All other terminals will default to the xterm files
 
+# Contributing
+
+You will need:
+
+- NodeJS 12.x or newer
+- npm
+
+If you need to update the images and xterm files, you will need:
+
+- ImageMagick
+- [img2xterm](https://github.com/rossy/img2xterm) (this needs to be compiled from source)
+
+Then run
+
+```
+npm run scrape && npm run make-xterm
+```
+
 # Changelog
 
 ## 1.1.1
