@@ -23,7 +23,7 @@ npm i -g pokemonshow
 		--say, -s Announces the name of the Pokémon
 
 	Examples
-    $ pokemonshow
+		$ pokemonshow
 		$ pokemonshow pikachu
 		$ pokemonshow 025 -x
 		$ pokemonshow 025 -s
