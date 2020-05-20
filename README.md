@@ -2,9 +2,15 @@
 
 Shows a (random) Pokémon in your terminal!
 
+# Installation
+
+```
+npm i -g pokemonshow
+```
+
 # Demo
 
-![](demo.gif)
+![](https://raw.githubusercontent.com/eramdam/pokemonshow/master/demo.gif)
 
 # Usage
 
@@ -14,7 +20,7 @@ Shows a (random) Pokémon in your terminal!
 
 	Options
 		--xterm, -x  Show xterm instead of image in iTerm
-		--say, -s
+		--say, -s Announces the name of the Pokémon
 
 	Examples
     $ pokemonshow
@@ -28,6 +34,10 @@ Shows a (random) Pokémon in your terminal!
 - The small images are only displayed on iTerm2 >= 3.x (using [term-img](https://github.com/sindresorhus/term-img)). All other terminals will default to the xterm files
 
 # Changelog
+
+## 1.1.1
+
+- Makes sure the number maps to the "vanilla" form of a given Pokémon
 
 ## 1.1.0
 

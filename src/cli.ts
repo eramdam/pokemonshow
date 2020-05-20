@@ -13,12 +13,14 @@ const cli = meow(
 
 	Options
 		--xterm, -x  Show xterm instead of image in iTerm
-		--say, -s
+		--say, -s Announces the name of the Pokémon
 
-	Examples
-		$ pokemonshow pikachu
-		$ pokemonshow 025 -x
-`,
+  Examples
+    $ pokemonshow
+    $ pokemonshow pikachu
+    $ pokemonshow 025 -x
+    $ pokemonshow 42 -s
+    `,
   {
     flags: {
       xterm: {
