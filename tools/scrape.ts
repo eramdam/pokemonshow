@@ -6,11 +6,28 @@ import * as fs from "fs";
 import * as path from "path";
 import _ from "lodash";
 import slug from "slug";
-import sharp from "sharp";
+import * as GM from "gm";
+
+const gm = GM.subClass({ imageMagick: true });
 
 const pokemonListUrl = `http://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_National_Pok%C3%A9dex_number`;
 
 const imagesSelector = `#mw-content-text table tr th a img`;
+
+function trimAndSaveImage(image: string) {
+  return new Promise((resolve, reject) => {
+    gm(image)
+      .trim()
+      .write(image, (err) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve();
+      });
+  });
+}
 
 (async () => {
   const response = await (await axios.get(pokemonListUrl)).data;
@@ -38,7 +55,6 @@ const imagesSelector = `#mw-content-text table tr th a img`;
         number,
         filename,
         pokemon,
-        size: {},
       };
     })
     .compact()
@@ -62,14 +78,9 @@ const imagesSelector = `#mw-content-text table tr th a img`;
       bar.tick();
 
       const imagePath = path.resolve(__dirname, "../images", image.filename);
+      fs.writeFileSync(imagePath, response.data);
 
-      const metadata = await sharp(response.data).metadata();
-      image.size = {
-        width: metadata.width || 0,
-        height: metadata.height || 0,
-      };
-
-      return await sharp(response.data).toFile(imagePath);
+      await trimAndSaveImage(imagePath);
     } catch (e) {
       console.error(`Could not download ${image.pokemon} from ${image.src}`);
       console.error(e);
@@ -85,7 +96,6 @@ const imagesSelector = `#mw-content-text table tr th a img`;
     .mapValues((image) => ({
       filename: image.filename,
       name: image.pokemon,
-      size: image.size,
     }))
     .value();
   const pokeMapByNumber = _(imagesObjects)
@@ -95,7 +105,6 @@ const imagesSelector = `#mw-content-text table tr th a img`;
     .mapValues((image) => ({
       filename: image.filename,
       name: image.pokemon,
-      size: image.size,
     }))
     .value();
 
