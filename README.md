@@ -53,7 +53,7 @@ npm run scrape && npm run make-xterm
 
 # Changelog
 
-## 1.1.1
+## 1.1.2
 
 - Makes sure the number maps to the "vanilla" form of a given Pokémon
 
