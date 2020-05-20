@@ -1,6 +1,6 @@
 {
   "name": "pokemonshow",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Shows a (random) Pokémon in your terminal!",
   "main": "index.js",
   "scripts": {
