@@ -90,7 +90,7 @@ function trimAndSaveImage(image: string) {
 
   await Promise.all(promises);
 
-  const pokeMapByname = _(imagesObjects)
+  const pokeMapByName = _(imagesObjects)
     .keyBy((image) => {
       return slug(image.localName.replace(/([^a-z])/gi, "-$1")).toLowerCase();
     })
@@ -131,7 +131,7 @@ function trimAndSaveImage(image: string) {
     }))
     .value();
 
-  const pokeMap = { ...pokeMapByNumber, ...pokeMapByname };
+  const pokeMap = { ...pokeMapByNumber, ...pokeMapByName };
   await fs.promises.writeFile(
     path.resolve(__dirname, "..", "pokemon.json"),
     JSON.stringify(pokeMap)
