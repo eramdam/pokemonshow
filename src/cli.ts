@@ -3,8 +3,14 @@ import pokemonJson from "../pokemon.json";
 import path from "path";
 import termImg from "term-img";
 import execa from "execa";
-
+import Fuse from "fuse.js";
 const meow = require("meow");
+
+const fuse = new Fuse(Object.values(pokemonJson), {
+  keys: ["name", "filename"],
+  isCaseSensitive: false,
+  shouldSort: true,
+});
 
 const cli = meow(
   `
@@ -39,7 +45,7 @@ type PokemonKey = keyof typeof pokemonJson;
 type ValueOf<T> = T[keyof T];
 type Pokemon = ValueOf<typeof pokemonJson>;
 
-function getPokemonFromInput(nameOrNumber?: string) {
+function getPokemonFromInput(nameOrNumber?: string): Pokemon | undefined {
   if (!nameOrNumber) {
     const names = Object.keys(pokemonJson).filter(
       (i) => !Number.isInteger(Number(i))
@@ -49,11 +55,25 @@ function getPokemonFromInput(nameOrNumber?: string) {
     return pokemonJson[randomName as PokemonKey];
   }
 
+  // Is the input a number? If so then let's use it.
   if (Number.isInteger(Number(nameOrNumber)) && Number(nameOrNumber) > 0) {
-    const finalNumber = Number(nameOrNumber).toString();
-    return pokemonJson[finalNumber as PokemonKey];
-  } else {
     return pokemonJson[nameOrNumber as PokemonKey];
+  } else {
+    // Try finding the given pokemon using its "alias"
+    const pokemonUsingKey =
+      pokemonJson[nameOrNumber.toLowerCase() as PokemonKey];
+
+    if (pokemonUsingKey) {
+      return pokemonUsingKey;
+    }
+
+    // Otherwise, use fuzzy search to find a match.
+    const fuzzyResults = fuse.search(nameOrNumber);
+    if (!fuzzyResults || fuzzyResults.length < 1) {
+      return undefined;
+    }
+
+    return fuzzyResults[0].item;
   }
 }
 
