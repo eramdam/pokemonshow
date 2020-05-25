@@ -92,7 +92,9 @@ function trimAndSaveImage(image: string) {
 
   const pokeMapByName = _(imagesObjects)
     .keyBy((image) => {
-      return slug(image.localName.replace(/([^a-z])/gi, "-$1")).toLowerCase();
+      return slug(image.localName.replace(/([^a-z])/gi, "-$1"))
+        .replace("-XY", "")
+        .toLowerCase();
     })
     .mapValues((image) => ({
       filename: image.filename,
