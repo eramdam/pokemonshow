@@ -19,7 +19,8 @@ const cli = meow(
 
 	Options
 		--xterm, -x  Show xterm instead of image in iTerm
-		--say, -s Announces the name of the Pokémon
+    --say, -s Announces the name of the Pokémon
+    --list Lists all the available Pokémon
 
   Examples
     $ pokemonshow
@@ -36,6 +37,9 @@ const cli = meow(
       say: {
         type: "boolean",
         alias: "s",
+      },
+      list: {
+        type: "boolean",
       },
     },
   }
@@ -106,6 +110,26 @@ async function displayImage(
 }
 
 (async () => {
+  if (cli.flags.list) {
+    Object.entries(pokemonJson)
+      .filter(([key]) => {
+        if (Number.isInteger(Number(key))) {
+          return false;
+        }
+
+        return true;
+      })
+      .forEach(([, value]) => {
+        const numberMatch = value.filename.match(/^([0-9]{3})/);
+        console.log({
+          name: value.name,
+          number: numberMatch ? numberMatch[0] : "",
+          filename: value.filename,
+        });
+      });
+    return;
+  }
+
   const name = cli.input[0];
   const pokemon = getPokemonFromInput(name);
 

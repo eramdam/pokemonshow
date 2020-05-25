@@ -21,6 +21,7 @@ npm i -g pokemonshow
 	Options
 		--xterm, -x  Show xterm instead of image in iTerm
 		--say, -s Announces the name of the Pokémon
+		--list Lists all the available Pokémon
 
 	Examples
 		$ pokemonshow
@@ -29,9 +30,53 @@ npm i -g pokemonshow
 		$ pokemonshow 025 -s
 ```
 
+## About alternative forms
+
+Some Pokémon have [different forms](https://bulbapedia.bulbagarden.net/wiki/Variant_Pok%C3%A9mon), thus different sprites. Since they _technically_ have the same name everytime, they can be referred using the filename that Bulbapedia uses for their sprite.
+
+An example with [Vulpix](<https://bulbapedia.bulbagarden.net/wiki/Vulpix_(Pok%C3%A9mon)>) would look like this:
+
+- "Regular" Vulpix
+  - `pokemonshow vulpix`
+- Alolan Vulpix
+  - `pokemonshow vulpix-a`
+
+![](meta/vulpix.png)
+
+Some recurring suffixes are:
+
+- `-a` => Alola
+- `-g` => Galar
+
+There are a lot of small exceptions for all the different variations of Pokémon, the best solution is to run the following command to see all the variations of a given Pokémon:
+
+```
+pokemonshow --list | grep <name>
+```
+
+## About "special" names
+
+Some Pokémon have names with special characters that are hard to type in a terminal. Examples of this are:
+
+- Farfetch'd
+- Mr. Mime
+- Nidoran♂ and Nidoran♀
+- Flabébé
+
+In order to work around this, each Pokémon get an unique [slug](https://www.npmjs.com/package/slug) generated from their name, as such, the above examples become:
+
+- Farfetch'd => `farfetch-d`
+- Mr. Mime => `mr-mime`
+- Nidoran♂ and Nidoran♀ => `nidoran-male` and `nidoran-female`
+- Flabébé => `flabebe`
+
 # Limitations
 
-- The small images are only displayed on iTerm2 >= 3.x (using [term-img](https://github.com/sindresorhus/term-img)). All other terminals will default to the xterm files
+- The small images are only displayed on iTerm2 >= 3.x (using [term-img](https://github.com/sindresorhus/term-img)). All other terminals will default to the xterm files.
+
+# Notice
+
+Please notice I don't own Pokémon or anything related to it. Pokémon is property of [The Pokémon Company](https://en.wikipedia.org/wiki/The_Pok%C3%A9mon_Company).
 
 # Contributing
 
@@ -50,24 +95,3 @@ Then run
 ```
 npm run scrape && npm run make-xterm
 ```
-
-# Changelog
-
-## 1.2.0
-
-- Some Pokémon couldn't be matched using their name. This should be fixed.
-- Now uses a fuzzy search as a fallback
-
-## 1.1.2
-
-- Makes sure the number maps to the "vanilla" form of a given Pokémon
-
-## 1.1.0
-
-- Images are cropped of their transparent pixels for smaller sizes
-- Alternate forms of Pokémon (Alola, Galar, etc) actually work and can be used
-- Rename `--say-name` to `--say`
-
-## 1.0.2
-
-Initial release :tada:
