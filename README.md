@@ -53,7 +53,7 @@ npm run scrape && npm run make-xterm
 
 # Changelog
 
-## 1.1.3
+## 1.2.0
 
 - Some Pokémon couldn't be matched using their name. This should be fixed.
 - Now uses a fuzzy search as a fallback
