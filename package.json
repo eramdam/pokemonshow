@@ -41,7 +41,7 @@
     "@types/lodash": "^4.14.151",
     "@types/progress": "^2.0.3",
     "@types/slug": "^0.9.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "gm": "^1.23.1",
     "jsdom": "^16.2.2",
     "lodash": "^4.17.15",
