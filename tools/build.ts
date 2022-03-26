@@ -120,6 +120,7 @@ const gen8Sprites = path.resolve(pokesprite.baseDir, pokesprite.pokemonDirs[1]);
                 hasFemaleSprite && {
                   is_gen_8: true,
                   form: key,
+                  female: true,
                   shiny: true,
                   sprite: femaleShiny,
                 },
