@@ -1,11 +1,10 @@
 import execa from "execa";
 import fs from "fs";
 import * as GM from "gm";
-import _ from "lodash";
+import _, { isObject } from "lodash";
 import path from "path";
 import pokespriteData from "pokesprite-images/data/pokemon.json";
 import ProgressBar from "progress";
-import { hasProperty } from "../src/helpers";
 const pokesprite = require("pokesprite-images");
 
 const gm = GM.subClass({ imageMagick: true });
@@ -200,3 +199,10 @@ const gen8Sprites = path.resolve(pokesprite.baseDir, pokesprite.pokemonDirs[1]);
     { encoding: "utf-8" }
   );
 })();
+
+function hasProperty<T, K extends string>(
+  o: T,
+  k: K
+): o is T & Object & Record<K, unknown> {
+  return isObject(o) && k in o;
+}
