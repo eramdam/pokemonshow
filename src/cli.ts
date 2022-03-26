@@ -5,10 +5,16 @@ import termImg from "term-img";
 import execa from "execa";
 import Fuse from "fuse.js";
 import _ from "lodash";
-const meow = require("meow");
+import meow from "meow";
 
 const fuse = new Fuse(Object.values(pokemonJson), {
-  keys: ["names", "sprites"],
+  keys: [
+    "prettyNames.eng",
+    "prettyNames.chs",
+    "prettyNames.jpn",
+    "prettyNames.jpr_ro",
+    "sprites",
+  ],
   isCaseSensitive: false,
   shouldSort: true,
 });
@@ -20,18 +26,23 @@ const cli = meow(
 
 	Options
 		--xterm, -x  Outputs xterm instead of image in iTerm2.app
-    --say, -s Announces the name of the Pokémon
-    --shiny, -sh Chooses the shiny version of the Pokémon (if available)
-    --form, -f Choose a specific form of the Pokémon (if available)
+    --say Announces the name of the Pokémon
+    --shiny Chooses the shiny sprite of the Pokémon (if available)
+    --female Chooses the female sprite of the Pokémon (if available)
+    --form Chooses a specific form of the Pokémon (if available)
+    --gen8 Chooses the gen8 sprite of the Pokémon (if available)
     --list Lists all the available Pokémon
+    --verbose, -v Outputs logs about the chosen Pokémon
 
   Examples
     $ pokemonshow
-    $ pokemonshow pikachu
-    $ pokemonshow 025 -x -sh
-    $ pokemonshow 42 -s
+    $ pokemonshow rotom
+    $ pokemonshow pikachu --form="gmax"
+    $ pokemonshow porygon --shiny
+    $ pokemonshow raichu --gen8 -x
     `,
   {
+    autoHelp: true,
     flags: {
       xterm: {
         type: "boolean",
@@ -39,18 +50,29 @@ const cli = meow(
       },
       say: {
         type: "boolean",
-        alias: "s",
       },
       list: {
         type: "boolean",
       },
       shiny: {
         type: "boolean",
-        alias: "sh",
+        default: false,
       },
       form: {
+        type: "string",
+        default: "$",
+      },
+      female: {
         type: "boolean",
-        form: "sh",
+        default: false,
+      },
+      gen8: {
+        type: "boolean",
+        default: false,
+      },
+      verbose: {
+        type: "boolean",
+        alias: "v",
       },
     },
   }
@@ -80,20 +102,44 @@ function getPokemonFromInput(nameOrNumber?: string): Pokemon | undefined {
   }
 }
 
-async function displayImage(
-  pokemon: Pokemon,
-  useFallback = false,
-  showName = false
-) {
-  if (showName) {
+function chooseSprite(pokemon: Pokemon, flags: typeof cli.flags): string {
+  const sorted = _(pokemon.sprites)
+    .orderBy(
+      [
+        (sprite) => {
+          return sprite.form.includes(flags.form.toLowerCase());
+        },
+        (sprite) => {
+          return flags.female === sprite.female;
+        },
+        (sprite) => {
+          return flags.gen8 === sprite.is_gen_8;
+        },
+        (sprite) => {
+          return flags.shiny === sprite.shiny;
+        },
+      ],
+      ["desc", "desc", "desc", "desc", "desc"]
+    )
+    .value();
+
+  if (flags.verbose) {
+    console.log(sorted, flags);
+  }
+  return sorted[0].sprite;
+}
+
+async function displayImage(pokemon: Pokemon, flags: typeof cli.flags) {
+  if (flags.say) {
     console.log(`It's ${pokemon.prettyNames.eng}!`);
   }
+  const chosenSprite = chooseSprite(pokemon, flags);
   const fallback = async () => {
     const { stdout } = await execa("cat", [
       path.resolve(
         __dirname,
         "..",
-        ...pokemon.sprites[0].sprite
+        ...chosenSprite
           .replace(".png", "")
           .replace("images/", "xterms/")
           .split("/")
@@ -102,16 +148,13 @@ async function displayImage(
     console.log(stdout);
   };
 
-  if (useFallback) {
+  if (flags.xterm) {
     return fallback();
   }
 
-  termImg(
-    path.resolve(__dirname, "..", ...pokemon.sprites[0].sprite.split("/")),
-    {
-      fallback,
-    }
-  );
+  termImg(path.resolve(__dirname, "..", ...chosenSprite.split("/")), {
+    fallback,
+  });
 }
 
 (async () => {
@@ -123,12 +166,18 @@ async function displayImage(
   }
 
   const name = cli.input[0];
+  if (!name) {
+    return;
+  }
   const pokemon = getPokemonFromInput(name);
-  console.log({ pokemon });
 
   if (!pokemon) {
     return;
   }
 
-  displayImage(pokemon, !!cli.flags.xterm, !!cli.flags.say);
+  if (cli.flags.verbose) {
+    console.log(pokemon);
+  }
+
+  displayImage(pokemon, cli.flags);
 })();
