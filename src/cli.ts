@@ -1,13 +1,21 @@
 #!/usr/bin/env node
-import pokemonJson from "../pokemon.json";
-import path from "path";
-import termImg from "term-img";
 import execa from "execa";
 import Fuse from "fuse.js";
-const meow = require("meow");
+import _ from "lodash";
+import meow from "meow";
+import path from "path";
+import termImg from "term-img";
+import pokemonJson from "../pokemon.json";
 
 const fuse = new Fuse(Object.values(pokemonJson), {
-  keys: ["name", "filename"],
+  keys: [
+    "prettyNames.eng",
+    "prettyNames.chs",
+    "prettyNames.jpn",
+    "prettyNames.jpr_ro",
+    "sprites",
+    "names",
+  ],
   isCaseSensitive: false,
   shouldSort: true,
 });
@@ -18,17 +26,25 @@ const cli = meow(
 	  $ pokemonshow <nameOrNumber>
 
 	Options
-		--xterm, -x  Show xterm instead of image in iTerm
-    --say, -s Announces the name of the Pokémon
+		--xterm, -x  Outputs xterm instead of image in iTerm2.app
+    --say Announces the name of the Pokémon
+    --shiny Chooses the shiny sprite of the Pokémon (if available)
+    --female Chooses the female sprite of the Pokémon (if available)
+    --form Chooses a specific form of the Pokémon (if available)
+    --gen8 Chooses the gen8 sprite of the Pokémon (if available)
     --list Lists all the available Pokémon
+    --list-forms Lists all Pokémon with special forms
+    --verbose, -v Outputs logs about the chosen Pokémon
 
   Examples
     $ pokemonshow
-    $ pokemonshow pikachu
-    $ pokemonshow 025 -x
-    $ pokemonshow 42 -s
+    $ pokemonshow rotom
+    $ pokemonshow pikachu --form="gmax"
+    $ pokemonshow porygon --shiny
+    $ pokemonshow raichu --gen8 -x
     `,
   {
+    autoHelp: true,
     flags: {
       xterm: {
         type: "boolean",
@@ -36,42 +52,52 @@ const cli = meow(
       },
       say: {
         type: "boolean",
-        alias: "s",
       },
       list: {
         type: "boolean",
+      },
+      listForms: {
+        type: "boolean",
+      },
+      shiny: {
+        type: "boolean",
+        default: false,
+      },
+      form: {
+        type: "string",
+        default: "$",
+      },
+      female: {
+        type: "boolean",
+        default: false,
+      },
+      gen8: {
+        type: "boolean",
+        default: false,
+      },
+      verbose: {
+        type: "boolean",
+        alias: "v",
       },
     },
   }
 );
 
-type PokemonKey = keyof typeof pokemonJson;
-type ValueOf<T> = T[keyof T];
-type Pokemon = ValueOf<typeof pokemonJson>;
+type Pokemon = typeof pokemonJson[number];
 
 function getPokemonFromInput(nameOrNumber?: string): Pokemon | undefined {
   if (!nameOrNumber) {
-    const names = Object.keys(pokemonJson).filter(
-      (i) => !Number.isInteger(Number(i))
-    );
-    const randomName = names[Math.floor(Math.random() * names.length)];
-
-    return pokemonJson[randomName as PokemonKey];
+    return _.sample(pokemonJson);
   }
 
-  // Is the input a number? If so then let's use it.
-  if (Number.isInteger(Number(nameOrNumber)) && Number(nameOrNumber) > 0) {
-    return pokemonJson[nameOrNumber as PokemonKey];
+  const maybeNumber = Number(nameOrNumber);
+  if (
+    maybeNumber > 0 &&
+    Number.isInteger(maybeNumber) &&
+    Number.isFinite(maybeNumber)
+  ) {
+    return pokemonJson.find((p) => p.number === maybeNumber);
   } else {
-    // Try finding the given pokemon using its "alias"
-    const pokemonUsingKey =
-      pokemonJson[nameOrNumber.toLowerCase() as PokemonKey];
-
-    if (pokemonUsingKey) {
-      return pokemonUsingKey;
-    }
-
-    // Otherwise, use fuzzy search to find a match.
     const fuzzyResults = fuse.search(nameOrNumber);
     if (!fuzzyResults || fuzzyResults.length < 1) {
       return undefined;
@@ -81,61 +107,99 @@ function getPokemonFromInput(nameOrNumber?: string): Pokemon | undefined {
   }
 }
 
-async function displayImage(
-  pokemon: Pokemon,
-  useFallback: boolean,
-  showName: boolean
-) {
-  if (showName) {
-    console.log(`It's ${pokemon.name}!\n`);
+function chooseSprite(pokemon: Pokemon, flags: typeof cli.flags): string {
+  const sorted = _(pokemon.sprites)
+    .orderBy(
+      [
+        (sprite) => {
+          return sprite.form === flags.form.toLowerCase();
+        },
+        (sprite) => {
+          return flags.female === sprite.female;
+        },
+        (sprite) => {
+          return flags.gen8 === sprite.is_gen_8;
+        },
+        (sprite) => {
+          return flags.shiny === sprite.shiny;
+        },
+      ],
+      ["desc", "desc", "desc", "desc", "desc"]
+    )
+    .value();
+
+  if (flags.verbose) {
+    console.log(sorted, flags);
   }
+  return sorted[0].sprite;
+}
+
+async function displayImage(pokemon: Pokemon, flags: typeof cli.flags) {
+  if (flags.say) {
+    console.log(`It's ${pokemon.prettyNames.eng}!`);
+  }
+  const chosenSprite = chooseSprite(pokemon, flags);
   const fallback = async () => {
     const { stdout } = await execa("cat", [
       path.resolve(
         __dirname,
-        "../xterms",
-        pokemon.filename.replace(".png", "")
+        "..",
+        ...chosenSprite
+          .replace(".png", "")
+          .replace("images/", "xterms/")
+          .split("/")
       ),
     ]);
     console.log(stdout);
   };
 
-  if (useFallback) {
+  if (flags.xterm) {
     return fallback();
   }
 
-  termImg(path.resolve(__dirname, "../images", pokemon.filename), {
+  termImg(path.resolve(__dirname, "..", ...chosenSprite.split("/")), {
     fallback,
   });
 }
 
 (async () => {
   if (cli.flags.list) {
-    Object.entries(pokemonJson)
-      .filter(([key]) => {
-        if (Number.isInteger(Number(key))) {
-          return false;
-        }
+    pokemonJson.forEach((pkmn) => {
+      console.log(pkmn);
+    });
+    return;
+  }
 
-        return true;
-      })
-      .forEach(([, value]) => {
-        const numberMatch = value.filename.match(/^([0-9]{3})/);
+  if (cli.flags.listForms) {
+    pokemonJson
+      .filter((p) => p.sprites.some((s) => s.form !== "$"))
+      .forEach((p) =>
         console.log({
-          name: value.name,
-          number: numberMatch ? numberMatch[0] : "",
-          filename: value.filename,
-        });
-      });
+          number: p.number,
+          name: p.prettyNames.eng,
+          forms: _(p.sprites)
+            .map((s) => s.form)
+            .filter((s) => s !== "$")
+            .uniq()
+            .value(),
+        })
+      );
     return;
   }
 
   const name = cli.input[0];
+  if (!name) {
+    return;
+  }
   const pokemon = getPokemonFromInput(name);
 
   if (!pokemon) {
     return;
   }
 
-  displayImage(pokemon, !!cli.flags.xterm, !!cli.flags.say);
+  if (cli.flags.verbose) {
+    console.log(pokemon);
+  }
+
+  displayImage(pokemon, cli.flags);
 })();

@@ -105,3 +105,4 @@ dist
 
 tools/*.js
 src/*.js
+.DS_Store
