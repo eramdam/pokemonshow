@@ -9,12 +9,12 @@
     "build": "tsc",
     "clean": "rm src/*.js tools/*.js",
     "typecheck": "tsc --noEmit",
-    "prepublish": "npm run build"
+    "prepack": "npm run clean; npm run build"
   },
   "files": [
     "src/cli.js",
-    "images/*.png",
-    "xterms/*",
+    "images",
+    "xterms",
     "pokemon.json"
   ],
   "repository": {
@@ -40,16 +40,16 @@
     "@types/lodash": "^4.14.151",
     "@types/progress": "^2.0.3",
     "gm": "^1.23.1",
+    "pokesprite-images": "^2.6.0",
     "progress": "^2.0.3",
     "ts-node": "^8.10.1",
-    "typescript": "^3.9.2",
-    "pokesprite-images": "^2.6.0"
+    "typescript": "^3.9.2"
   },
   "dependencies": {
     "execa": "^4.0.1",
     "fuse.js": "^6.0.0",
+    "lodash": "^4.17.15",
     "meow": "^9.0.0",
-    "term-img": "^4.1.0",
-    "lodash": "^4.17.15"
+    "term-img": "^4.1.0"
   }
 }
