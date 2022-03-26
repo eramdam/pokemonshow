@@ -10,7 +10,7 @@ npm i -g pokemonshow
 
 # Demo
 
-![](https://raw.githubusercontent.com/eramdam/pokemonshow/master/demo.gif)
+![](https://raw.githubusercontent.com/eramdam/pokemonshow/master/meta/demo.gif)
 
 # Usage
 
