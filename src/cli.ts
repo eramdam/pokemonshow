@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-import pokemonJson from "../pokemon.json";
-import path from "path";
-import termImg from "term-img";
 import execa from "execa";
 import Fuse from "fuse.js";
 import _ from "lodash";
 import meow from "meow";
+import path from "path";
+import termImg from "term-img";
+import pokemonJson from "../pokemon.json";
 
 const fuse = new Fuse(Object.values(pokemonJson), {
   keys: [
