@@ -53,6 +53,7 @@ const gen8Sprites = path.resolve(pokesprite.baseDir, pokesprite.pokemonDirs[1]);
     .map((pkmn) => {
       return {
         number: Number(pkmn.idx),
+        prettyNames: pkmn.name,
         names: _([pkmn.name.eng, pkmn.slug.eng])
           .map((n) => n.toLowerCase())
           .uniq()
