@@ -108,7 +108,7 @@ function chooseSprite(pokemon: Pokemon, flags: typeof cli.flags): string {
     .orderBy(
       [
         (sprite) => {
-          return sprite.form.includes(flags.form.toLowerCase());
+          return sprite.form === flags.form.toLowerCase();
         },
         (sprite) => {
           return flags.female === sprite.female;
