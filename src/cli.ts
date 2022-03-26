@@ -14,6 +14,7 @@ const fuse = new Fuse(Object.values(pokemonJson), {
     "prettyNames.jpn",
     "prettyNames.jpr_ro",
     "sprites",
+    "names",
   ],
   isCaseSensitive: false,
   shouldSort: true,
