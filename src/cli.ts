@@ -33,6 +33,7 @@ const cli = meow(
     --form Chooses a specific form of the Pokémon (if available)
     --gen8 Chooses the gen8 sprite of the Pokémon (if available)
     --list Lists all the available Pokémon
+    --list-forms Lists all Pokémon with special forms
     --verbose, -v Outputs logs about the chosen Pokémon
 
   Examples
@@ -53,6 +54,9 @@ const cli = meow(
         type: "boolean",
       },
       list: {
+        type: "boolean",
+      },
+      listForms: {
         type: "boolean",
       },
       shiny: {
@@ -163,6 +167,23 @@ async function displayImage(pokemon: Pokemon, flags: typeof cli.flags) {
     pokemonJson.forEach((pkmn) => {
       console.log(pkmn);
     });
+    return;
+  }
+
+  if (cli.flags.listForms) {
+    pokemonJson
+      .filter((p) => p.sprites.some((s) => s.form !== "$"))
+      .forEach((p) =>
+        console.log({
+          number: p.number,
+          name: p.prettyNames.eng,
+          forms: _(p.sprites)
+            .map((s) => s.form)
+            .filter((s) => s !== "$")
+            .uniq()
+            .value(),
+        })
+      );
     return;
   }
 

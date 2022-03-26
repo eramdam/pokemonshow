@@ -15,60 +15,33 @@ npm i -g pokemonshow
 # Usage
 
 ```
-	Usage
-	  $ pokemonshow <nameOrNumber>
+  Shows a (random) Pokémon in your terminal!
 
-	Options
-		--xterm, -x  Show xterm instead of image in iTerm
-		--say, -s Announces the name of the Pokémon
-		--list Lists all the available Pokémon
+  Usage
+    $ pokemonshow <nameOrNumber>
 
-	Examples
-		$ pokemonshow
-		$ pokemonshow pikachu
-		$ pokemonshow 025 -x
-		$ pokemonshow 025 -s
+  Options
+     --xterm, -x  Outputs xterm instead of image in iTerm2.app
+     --say Announces the name of the Pokémon
+     --shiny Chooses the shiny sprite of the Pokémon (if available)
+     --female Chooses the female sprite of the Pokémon (if available)
+     --form Chooses a specific form of the Pokémon (if available)
+     --gen8 Chooses the gen8 sprite of the Pokémon (if available)
+     --list Lists all the available Pokémon
+     --list-forms Lists all Pokémon with special forms
+     --verbose, -v Outputs logs about the chosen Pokémon
+
+   Examples
+     $ pokemonshow
+     $ pokemonshow rotom
+     $ pokemonshow pikachu --form="gmax"
+     $ pokemonshow porygon --shiny
+     $ pokemonshow raichu --gen8 -x
 ```
 
-## About alternative forms
+# Background
 
-Some Pokémon have [different forms](https://bulbapedia.bulbagarden.net/wiki/Variant_Pok%C3%A9mon), thus different sprites. Since they _technically_ have the same name everytime, they can be referred using the filename that Bulbapedia uses for their sprite.
-
-An example with [Vulpix](<https://bulbapedia.bulbagarden.net/wiki/Vulpix_(Pok%C3%A9mon)>) would look like this:
-
-- "Regular" Vulpix
-  - `pokemonshow vulpix`
-- Alolan Vulpix
-  - `pokemonshow vulpix-a`
-
-![](meta/vulpix.png)
-
-Some recurring suffixes are:
-
-- `-a` => Alola
-- `-g` => Galar
-
-There are a lot of small exceptions for all the different variations of Pokémon, the best solution is to run the following command to see all the variations of a given Pokémon:
-
-```
-pokemonshow --list | grep <name>
-```
-
-## About "special" names
-
-Some Pokémon have names with special characters that are hard to type in a terminal. Examples of this are:
-
-- Farfetch'd
-- Mr. Mime
-- Nidoran♂ and Nidoran♀
-- Flabébé
-
-In order to work around this, each Pokémon get an unique [slug](https://www.npmjs.com/package/slug) generated from their name, as such, the above examples become:
-
-- Farfetch'd => `farfetch-d`
-- Mr. Mime => `mr-mime`
-- Nidoran♂ and Nidoran♀ => `nidoran-male` and `nidoran-female`
-- Flabébé => `flabebe`
+All the data is based on the [pokesprite](https://github.com/msikma/pokesprite) project. You might want to look at [this page](https://msikma.github.io/pokesprite/overview/dex-gen8.html) to see the full list of Pokémon available.
 
 # Limitations
 
