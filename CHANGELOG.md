@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.1
+
+- Fix random feature
+
+## 2.0.0
+
+- Complete rewrite using the data from [pokesprite](https://github.com/msikma/pokesprite) instead of scraping Bulbapedia
+- Supports shinies, female variants, regional forms and mega/gigantamax forms
+
 ## 1.2.0
 
 - Some Pokémon couldn't be matched using their name. This should be fixed.
