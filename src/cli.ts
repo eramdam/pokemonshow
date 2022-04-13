@@ -188,9 +188,6 @@ async function displayImage(pokemon: Pokemon, flags: typeof cli.flags) {
   }
 
   const name = cli.input[0];
-  if (!name) {
-    return;
-  }
   const pokemon = getPokemonFromInput(name);
 
   if (!pokemon) {
