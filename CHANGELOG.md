@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.0
+
+- Upgrade to `pokesprite` 2.7.0
+
 ## 2.0.1
 
 - Fix random feature

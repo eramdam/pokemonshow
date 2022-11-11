@@ -1,6 +1,6 @@
 {
   "name": "pokemonshow",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Shows a (random) Pokémon in your terminal!",
   "main": "index.js",
   "scripts": {
@@ -39,7 +39,7 @@
     "@types/gm": "^1.18.8",
     "@types/lodash": "^4.14.151",
     "@types/progress": "^2.0.3",
-    "gm": "^1.23.1",
+    "gm": "^1.25.0",
     "pokesprite-images": "^2.6.0",
     "progress": "^2.0.3",
     "ts-node": "^8.10.1",
