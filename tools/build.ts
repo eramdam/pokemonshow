@@ -1,4 +1,4 @@
-import execa from "execa";
+import { execa } from "execa";
 import fs from "fs-extra";
 import _, { isObject } from "lodash";
 import path from "path";
