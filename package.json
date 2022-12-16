@@ -1,6 +1,6 @@
 {
   "name": "pokemonshow",
-  "version": "3.0.0-1",
+  "version": "3.0.0-rc1",
   "description": "Shows a (random) Pokémon in your terminal!",
   "exports": "./index.js",
   "type": "module",
