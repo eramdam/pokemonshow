@@ -1,43 +1,27 @@
-import execa from "execa";
-import fs from "fs";
-import * as GM from "gm";
+import { execa } from "execa";
+import fs from "fs-extra";
 import _, { isObject } from "lodash";
 import path from "path";
 import pokespriteData from "pokesprite-images/data/pokemon.json";
 import ProgressBar from "progress";
 const pokesprite = require("pokesprite-images");
+import sharp from "sharp";
 
-const gm = GM.subClass({ imageMagick: true });
+async function trimAndSaveImage(src: string, dest: string) {
+  const foldername = path.dirname(
+    path.resolve(__dirname, "..", "images", ...dest.split("/"))
+  );
 
-function trimAndSaveImage(src: string, dest: string) {
-  return new Promise<string>((resolve, reject) => {
-    const foldername = path.dirname(
-      path.resolve(__dirname, "..", "images", ...dest.split("/"))
-    );
-
-    if (!fs.existsSync(foldername)) {
-      fs.mkdirSync(foldername, { recursive: true });
-    }
-
-    gm(src)
-      .trim()
-      .write(path.resolve(foldername, path.basename(dest)), (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(path.resolve(foldername, path.basename(dest)));
-      });
-  });
+  await fs.mkdirp(foldername);
+  const finalFilename = path.resolve(foldername, path.basename(dest));
+  await sharp(src).trim().png().toFile(finalFilename);
+  return finalFilename;
 }
 
 async function generateXterm(src: string, dest: string) {
   const foldername = path.dirname(dest);
 
-  if (!fs.existsSync(foldername)) {
-    fs.mkdirSync(foldername, { recursive: true });
-  }
+  fs.mkdirpSync(foldername);
 
   await execa("img2xterm", [src, dest.replace(".png", "")]);
 }
@@ -159,12 +143,12 @@ const gen8Sprites = path.resolve(pokesprite.baseDir, pokesprite.pokemonDirs[1]);
     {
       complete: "=",
       incomplete: " ",
-      width: 80,
+      width: 40,
       total: numberOfSprites,
     }
   );
 
-  for (const chunk of _.chunk(pkmnFormatted, 20)) {
+  for (const chunk of _.chunk(pkmnFormatted, 200)) {
     const promises = chunk.flatMap((pkmn) => {
       return pkmn.sprites.map((_sprite, index) => {
         const spriteObject = pkmn.sprites[index];

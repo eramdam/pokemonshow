@@ -1,12 +1,19 @@
 #!/usr/bin/env node
-import execa from "execa";
 import Fuse from "fuse.js";
 import _ from "lodash";
 import meow from "meow";
-import path from "path";
+import fs from "node:fs";
+import path, { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import termImg from "term-img";
-import pokemonJson from "../pokemon.json";
+import type pokemonJsonType from "../pokemon.json";
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pokemonJson = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "..", "./pokemon.json"), "utf-8")
+) as typeof pokemonJsonType;
+
+// @ts-expect-error
 const fuse = new Fuse(Object.values(pokemonJson), {
   keys: [
     "prettyNames.eng",
@@ -45,6 +52,7 @@ const cli = meow(
     `,
   {
     autoHelp: true,
+    importMeta: import.meta,
     flags: {
       xterm: {
         type: "boolean",
@@ -83,7 +91,7 @@ const cli = meow(
   }
 );
 
-type Pokemon = typeof pokemonJson[number];
+type Pokemon = typeof pokemonJsonType[number];
 
 function getPokemonFromInput(nameOrNumber?: string): Pokemon | undefined {
   if (!nameOrNumber) {
@@ -139,8 +147,8 @@ async function displayImage(pokemon: Pokemon, flags: typeof cli.flags) {
     console.log(`It's ${pokemon.prettyNames.eng}!`);
   }
   const chosenSprite = chooseSprite(pokemon, flags);
-  const fallback = async () => {
-    const { stdout } = await execa("cat", [
+  const fallback = () => {
+    showXterm(
       path.resolve(
         __dirname,
         "..",
@@ -148,18 +156,25 @@ async function displayImage(pokemon: Pokemon, flags: typeof cli.flags) {
           .replace(".png", "")
           .replace("images/", "xterms/")
           .split("/")
-      ),
-    ]);
-    console.log(stdout);
+      )
+    );
   };
 
   if (flags.xterm) {
     return fallback();
   }
 
-  termImg(path.resolve(__dirname, "..", ...chosenSprite.split("/")), {
+  const imagePath = path.resolve(__dirname, "..", ...chosenSprite.split("/"));
+  const result = termImg(imagePath, {
     fallback,
+    preserveAspectRatio: true,
+    height: "200px",
+    width: "200px",
   });
+
+  if (result) {
+    console.log(result);
+  }
 }
 
 (async () => {
@@ -200,3 +215,8 @@ async function displayImage(pokemon: Pokemon, flags: typeof cli.flags) {
 
   displayImage(pokemon, cli.flags);
 })();
+
+async function showXterm(path: string) {
+  const stream = fs.createReadStream(path);
+  stream.pipe(process.stdout);
+}
