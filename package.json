@@ -1,6 +1,6 @@
 {
   "name": "pokemonshow",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Shows a (random) Pokémon in your terminal!",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,9 @@
     "xterms",
     "pokemon.json"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eramdam/pokemonshow.git"
