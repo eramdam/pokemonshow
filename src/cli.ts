@@ -1,12 +1,22 @@
 #!/usr/bin/env node
-import fs from "fs";
+// @ts-expect-error
+import { terminalKittyImage } from "term-kitty-img";
+
+import fs from "node:fs";
 import Fuse from "fuse.js";
 import _ from "lodash";
 import meow from "meow";
-import path from "path";
+import path, { dirname } from "node:path";
 import termImg from "term-img";
-import pokemonJson from "../pokemon.json";
+import type pokemonJsonType from "../pokemon.json";
+import { fileURLToPath } from "node:url";
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pokemonJson = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "..", "./pokemon.json"), "utf-8")
+) as typeof pokemonJsonType;
+
+// @ts-expect-error
 const fuse = new Fuse(Object.values(pokemonJson), {
   keys: [
     "prettyNames.eng",
@@ -45,6 +55,7 @@ const cli = meow(
     `,
   {
     autoHelp: true,
+    importMeta: import.meta,
     flags: {
       xterm: {
         type: "boolean",
@@ -83,7 +94,7 @@ const cli = meow(
   }
 );
 
-type Pokemon = typeof pokemonJson[number];
+type Pokemon = typeof pokemonJsonType[number];
 
 function getPokemonFromInput(nameOrNumber?: string): Pokemon | undefined {
   if (!nameOrNumber) {
@@ -156,9 +167,17 @@ async function displayImage(pokemon: Pokemon, flags: typeof cli.flags) {
     return fallback();
   }
 
-  termImg(path.resolve(__dirname, "..", ...chosenSprite.split("/")), {
+  const imagePath = path.resolve(__dirname, "..", ...chosenSprite.split("/"));
+  const result = termImg(imagePath, {
     fallback,
+    preserveAspectRatio: true,
+    height: "200px",
+    width: "200px",
   });
+
+  if (result) {
+    console.log(result);
+  }
 }
 
 (async () => {
