@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import execa from "execa";
+import fs from "fs";
 import Fuse from "fuse.js";
 import _ from "lodash";
 import meow from "meow";
@@ -139,8 +139,8 @@ async function displayImage(pokemon: Pokemon, flags: typeof cli.flags) {
     console.log(`It's ${pokemon.prettyNames.eng}!`);
   }
   const chosenSprite = chooseSprite(pokemon, flags);
-  const fallback = async () => {
-    const { stdout } = await execa("cat", [
+  const fallback = () => {
+    showXterm(
       path.resolve(
         __dirname,
         "..",
@@ -148,9 +148,8 @@ async function displayImage(pokemon: Pokemon, flags: typeof cli.flags) {
           .replace(".png", "")
           .replace("images/", "xterms/")
           .split("/")
-      ),
-    ]);
-    console.log(stdout);
+      )
+    );
   };
 
   if (flags.xterm) {
@@ -200,3 +199,8 @@ async function displayImage(pokemon: Pokemon, flags: typeof cli.flags) {
 
   displayImage(pokemon, cli.flags);
 })();
+
+async function showXterm(path: string) {
+  const stream = fs.createReadStream(path);
+  stream.pipe(process.stdout);
+}

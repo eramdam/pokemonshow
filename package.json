@@ -49,10 +49,10 @@
     "tsx": "^3.12.1",
     "typescript": "^4.9.4",
     "sharp": "^0.31.2",
-    "@types/sharp": "^0.31.0"
+    "@types/sharp": "^0.31.0",
+    "execa": "^4.0.1"
   },
   "dependencies": {
-    "execa": "^4.0.1",
     "fuse.js": "^6.0.0",
     "lodash": "^4.17.15",
     "meow": "^9.0.0",
