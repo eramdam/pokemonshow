@@ -1,15 +1,12 @@
 #!/usr/bin/env node
-// @ts-expect-error
-import { terminalKittyImage } from "term-kitty-img";
-
-import fs from "node:fs";
 import Fuse from "fuse.js";
 import _ from "lodash";
 import meow from "meow";
+import fs from "node:fs";
 import path, { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import termImg from "term-img";
 import type pokemonJsonType from "../pokemon.json";
-import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const pokemonJson = JSON.parse(
