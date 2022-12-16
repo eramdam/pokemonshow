@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0
+
+- Require Node 18 or above
+- Upgrade dependencies
+- Make the script into ESM
+
 ## 2.1.0
 
 - Upgrade to `pokesprite` 2.7.0
