@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.1
+
+- Add support for listing forms of a specific pokemon by name
+- Upgrade dependencies
+
 ## 3.0.0
 
 - Require Node 18 or above
