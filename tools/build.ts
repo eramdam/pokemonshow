@@ -1,11 +1,15 @@
+import * as url from "url";
 import { execa } from "execa";
 import fs from "fs-extra";
-import _, { isObject } from "lodash";
+import _ from "lodash";
 import path from "path";
 import pokespriteData from "pokesprite-images/data/pokemon.json";
 import ProgressBar from "progress";
-const pokesprite = require("pokesprite-images");
+// @ts-expect-error
+import pokesprite from "pokesprite-images";
 import sharp from "sharp";
+
+const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 async function trimAndSaveImage(src: string, dest: string) {
   const foldername = path.dirname(
@@ -188,5 +192,5 @@ function hasProperty<T, K extends string>(
   o: T,
   k: K
 ): o is T & Object & Record<K, unknown> {
-  return isObject(o) && k in o;
+  return _.isObject(o) && k in o;
 }
