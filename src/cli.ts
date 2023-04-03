@@ -13,7 +13,7 @@ const pokemonJson = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "..", "./pokemon.json"), "utf-8")
 ) as typeof pokemonJsonType;
 
-// @ts-expect-error
+// @ts-expect-error https://github.com/krisk/Fuse/issues/679
 const fuse = new Fuse(Object.values(pokemonJson), {
   keys: [
     "prettyNames.eng",
@@ -178,6 +178,9 @@ async function displayImage(pokemon: Pokemon, flags: typeof cli.flags) {
 }
 
 (async () => {
+  const name = cli.input[0];
+  const pokemon = getPokemonFromInput(name);
+
   if (cli.flags.list) {
     pokemonJson.forEach((pkmn) => {
       console.log(pkmn);
@@ -186,24 +189,22 @@ async function displayImage(pokemon: Pokemon, flags: typeof cli.flags) {
   }
 
   if (cli.flags.listForms) {
-    pokemonJson
-      .filter((p) => p.sprites.some((s) => s.form !== "$"))
-      .forEach((p) =>
-        console.log({
-          number: p.number,
-          name: p.prettyNames.eng,
-          forms: _(p.sprites)
-            .map((s) => s.form)
-            .filter((s) => s !== "$")
-            .uniq()
-            .value(),
-        })
-      );
+    (pokemon
+      ? [pokemon]
+      : pokemonJson.filter((p) => p.sprites.some((s) => s.form !== "$"))
+    ).forEach((p) =>
+      console.log({
+        number: p.number,
+        name: p.prettyNames.eng,
+        forms: _(p.sprites)
+          .map((s) => s.form)
+          .filter((s) => s !== "$")
+          .uniq()
+          .value(),
+      })
+    );
     return;
   }
-
-  const name = cli.input[0];
-  const pokemon = getPokemonFromInput(name);
 
   if (!pokemon) {
     return;
