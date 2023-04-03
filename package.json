@@ -40,18 +40,18 @@
   },
   "homepage": "https://github.com/eramdam/pokemonshow#readme",
   "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
-    "@types/lodash": "^4.14.191",
-    "@types/node": "^18.11.15",
+    "@types/fs-extra": "^11.0.1",
+    "@types/lodash": "^4.14.192",
+    "@types/node": "^18.15.11",
     "@types/progress": "^2.0.5",
-    "@types/sharp": "^0.31.0",
+    "@types/sharp": "^0.31.1",
     "execa": "^6.0.0",
-    "fs-extra": "^11.1.0",
-    "pokesprite-images": "^2.6.0",
+    "fs-extra": "^11.1.1",
+    "pokesprite-images": "^2.7.0",
     "progress": "^2.0.3",
-    "sharp": "^0.31.2",
-    "tsx": "^3.12.1",
-    "typescript": "^4.9.4"
+    "sharp": "^0.32.0",
+    "tsx": "^3.12.6",
+    "typescript": "^5.0.3"
   },
   "dependencies": {
     "fuse.js": "^6.6.2",
