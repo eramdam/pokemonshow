@@ -10,7 +10,8 @@
     "clean": "rm src/*.js tools/*.js",
     "typecheck": "tsc --noEmit",
     "typecheck:watch": "npm run typecheck -- --watch",
-    "prepack": "npm run clean; npm run build"
+    "prepack": "npm run clean; npm run build",
+    "test": "node --loader tsx --test --watch ./tests/*.ts"
   },
   "files": [
     "src/cli.js",
@@ -40,23 +41,23 @@
   },
   "homepage": "https://github.com/eramdam/pokemonshow#readme",
   "devDependencies": {
-    "@types/fs-extra": "^11.0.1",
-    "@types/lodash": "^4.14.192",
-    "@types/node": "^18.15.11",
-    "@types/progress": "^2.0.5",
-    "@types/sharp": "^0.31.1",
-    "execa": "^6.0.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/lodash": "^4.14.201",
+    "@types/node": "^20.9.0",
+    "@types/progress": "^2.0.7",
+    "@types/sharp": "^0.32.0",
+    "execa": "^8.0.1",
     "fs-extra": "^11.1.1",
     "pokesprite-images": "^2.7.0",
     "progress": "^2.0.3",
-    "sharp": "^0.32.0",
-    "tsx": "^3.12.6",
-    "typescript": "^5.0.3"
+    "sharp": "^0.32.6",
+    "tsx": "^4.1.1",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
-    "fuse.js": "^6.6.2",
-    "lodash": "^4.17.15",
-    "meow": "^11.0.0",
+    "fuse.js": "^7.0.0",
+    "lodash": "^4.17.21",
+    "meow": "^12.1.1",
     "term-img": "^6.0.0"
   }
 }
