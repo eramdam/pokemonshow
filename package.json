@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build-assets": "tsx ./tools/build.ts",
-    "build": "tsc",
+    "build": "tsc; chmod +x src/*.js",
     "clean": "rm src/*.js tools/*.js",
     "typecheck": "tsc --noEmit",
     "typecheck:watch": "npm run typecheck -- --watch",
