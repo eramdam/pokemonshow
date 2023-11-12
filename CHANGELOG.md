@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0
+
+- Drops support of Node 18 since it reached its end of life.
+- Upgrade dependencies
+
 ## 3.0.1
 
 - Add support for listing forms of a specific pokemon by name

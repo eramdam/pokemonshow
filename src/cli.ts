@@ -13,7 +13,6 @@ const pokemonJson = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "..", "./pokemon.json"), "utf-8")
 ) as typeof pokemonJsonType;
 
-// @ts-expect-error https://github.com/krisk/Fuse/issues/679
 const fuse = new Fuse(Object.values(pokemonJson), {
   keys: [
     "prettyNames.eng",
@@ -56,7 +55,7 @@ const cli = meow(
     flags: {
       xterm: {
         type: "boolean",
-        alias: "x",
+        shortFlag: "x",
       },
       say: {
         type: "boolean",
@@ -85,13 +84,13 @@ const cli = meow(
       },
       verbose: {
         type: "boolean",
-        alias: "v",
+        shortFlag: "v",
       },
     },
   }
 );
 
-type Pokemon = typeof pokemonJsonType[number];
+type Pokemon = (typeof pokemonJsonType)[number];
 
 function getPokemonFromInput(nameOrNumber?: string): Pokemon | undefined {
   if (!nameOrNumber) {
